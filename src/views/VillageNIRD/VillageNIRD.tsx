@@ -37,6 +37,7 @@ export const VillageNIRD = () => {
       ref={sectionRef}
       id="village-nird"
       className="relative min-h-[200vh] w-full overflow-hidden"
+      style={{ backgroundColor: '#298fba' }}
     >
       {/* Parallax background image */}
       <img

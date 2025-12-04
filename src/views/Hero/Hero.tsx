@@ -86,7 +86,7 @@ export const Hero = () => {
       >
         <h1
           ref={titleRef}
-          className="font-display text-[clamp(3rem,10vw,8rem)] font-black uppercase tracking-widest text-text-light text-glow-red absolute top-[10%] z-10 opacity-0 -translate-y-[100px]"
+          className="font-display text-[clamp(3rem,10vw,8rem)] font-black uppercase tracking-widest text-text-light text-glow-red absolute top-[10%] z-1 opacity-0 -translate-y-[100px]"
         >
           NIRD
         </h1>

@@ -12,6 +12,7 @@ export const Transition = () => {
     if (!sectionRef.current || !textRef.current) return;
 
     const ctx = gsap.context(() => {
+      // Text fade in
       gsap.fromTo(
         textRef.current,
         { opacity: 0, y: 50 },
@@ -21,22 +22,11 @@ export const Transition = () => {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 60%',
-            end: 'center center',
+            end: 'top 20%',
             scrub: true,
           },
         }
       );
-
-      gsap.to(textRef.current, {
-        opacity: 0,
-        y: -50,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'center center',
-          end: 'bottom 40%',
-          scrub: true,
-        },
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -83,9 +73,9 @@ export const Transition = () => {
         }}
       />
 
-      {/* Content */}
-      <div className="sticky top-0 h-screen flex items-center justify-center">
-        <div ref={textRef} className="text-center px-8 max-w-4xl">
+      {/* Text Content - sticky */}
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center">
+        <div ref={textRef} className="text-center px-8 max-w-4xl z-10">
           <h2 className="font-display text-[clamp(2rem,6vw,4rem)] text-text-light text-glow-cyan mb-6">
             LA RÉSISTANCE S'ORGANISE
           </h2>

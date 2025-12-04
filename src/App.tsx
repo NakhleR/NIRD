@@ -1,8 +1,9 @@
 import { Hero, EmpireIntro, Transition, VillageNIRD } from './views';
-import { useLenis } from './hooks';
+import { useLenis, useScrollbarColor } from './hooks';
 
 function App() {
   useLenis();
+  useScrollbarColor();
 
   return (
     <main>
