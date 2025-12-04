@@ -1,14 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cityRef = useRef<HTMLImageElement>(null);
   const robotRef = useRef<HTMLImageElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Intro animation
       const tl = gsap.timeline({
         defaults: { ease: 'power3.out' },
       });
@@ -39,6 +44,19 @@ export const Hero = () => {
         },
         '-=0.5'
       );
+
+      // Scroll-triggered fade out and parallax
+      gsap.to(contentRef.current, {
+        y: -100,
+        opacity: 0.3,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
     }, heroRef);
 
     return () => ctx.revert();
@@ -62,7 +80,10 @@ export const Hero = () => {
         }}
       />
 
-      <div className="relative w-full h-full flex flex-col items-center justify-center z-1">
+      <div
+        ref={contentRef}
+        className="relative w-full h-full flex flex-col items-center justify-center z-1"
+      >
         <h1
           ref={titleRef}
           className="font-display text-[clamp(3rem,10vw,8rem)] font-black uppercase tracking-widest text-text-light text-glow-red absolute top-[10%] z-10 opacity-0 -translate-y-[100px]"

@@ -1,7 +1,38 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const EmpireIntro = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current || !contentRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Fade in content as user scrolls into section
+      gsap.fromTo(
+        contentRef.current,
+        { opacity: 0, y: 80 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+            end: 'top 30%',
+            scrub: 1,
+          },
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
@@ -21,7 +52,7 @@ export const EmpireIntro = () => {
         }}
       />
 
-      <div className="relative z-10 text-center px-8 max-w-4xl">
+      <div ref={contentRef} className="relative z-10 text-center px-8 max-w-4xl">
         <h2 className="font-display text-[clamp(2rem,8vw,6rem)] text-empire-red text-glow-red mb-6">
           L'EMPIRE NUMÉRIQUE
         </h2>
