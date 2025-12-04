@@ -1,11 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
-interface HeroProps {
-  onComplete?: () => void;
-}
-
-export const Hero = ({ onComplete }: HeroProps) => {
+export const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cityRef = useRef<HTMLImageElement>(null);
@@ -15,7 +11,6 @@ export const Hero = ({ onComplete }: HeroProps) => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         defaults: { ease: 'power3.out' },
-        onComplete,
       });
 
       tl.to(cityRef.current, {
@@ -44,13 +39,10 @@ export const Hero = ({ onComplete }: HeroProps) => {
         },
         '-=0.5'
       );
-
-      // Hold for a moment before transitioning
-      tl.to({}, { duration: 1.5 });
     }, heroRef);
 
     return () => ctx.revert();
-  }, [onComplete]);
+  }, []);
 
   return (
     <section

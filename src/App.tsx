@@ -1,21 +1,12 @@
-import { useState } from 'react';
 import { Hero, EmpireIntro, Transition, VillageNIRD } from './views';
-
-type AppState = 'intro' | 'scrollytelling';
+import { useLenis } from './hooks';
 
 function App() {
-  const [appState, setAppState] = useState<AppState>('intro');
-
-  const handleHeroComplete = () => {
-    setAppState('scrollytelling');
-  };
-
-  if (appState === 'intro') {
-    return <Hero onComplete={handleHeroComplete} />;
-  }
+  useLenis();
 
   return (
     <main>
+      <Hero />
       <EmpireIntro />
       <Transition />
       <VillageNIRD />
