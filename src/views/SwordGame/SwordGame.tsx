@@ -210,6 +210,7 @@ export const SwordGame = () => {
   const lastMousePos = useRef({ x: 0, y: 0 });
   const velocity = useRef({ x: 0, y: 0 });
   const lastHitTime = useRef(0);
+  const hasTriggered = useRef(false);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -217,29 +218,41 @@ export const SwordGame = () => {
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: 'top 80%',
+        start: 'top bottom',
+        end: 'bottom top',
         onEnter: () => {
+          if (hasTriggered.current) return;
+          hasTriggered.current = true;
           setIsVisible(true);
-          if (containerRef.current) {
-            gsap.fromTo(
-              containerRef.current,
-              { x: '100vw', rotation: 360, scale: 0.3 },
-              {
-                x: 0,
-                rotation: 0,
-                scale: 1,
-                duration: 1.2,
-                ease: 'power3.out',
-                onComplete: () => setShowInstructions(true),
-              }
-            );
-          }
+        },
+        onEnterBack: () => {
+          if (hasTriggered.current) return;
+          hasTriggered.current = true;
+          setIsVisible(true);
         },
       });
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
+
+  // Animate container when it becomes visible
+  useEffect(() => {
+    if (!isVisible || !containerRef.current) return;
+
+    gsap.fromTo(
+      containerRef.current,
+      { x: '100vw', rotation: 360, scale: 0.3 },
+      {
+        x: 0,
+        rotation: 0,
+        scale: 1,
+        duration: 1.2,
+        ease: 'power3.out',
+        onComplete: () => setShowInstructions(true),
+      }
+    );
+  }, [isVisible]);
 
   // Mouse/touch tracking for sword
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
