@@ -4,6 +4,7 @@ import { useGLTF, Center, OrthographicCamera } from '@react-three/drei';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { stopScroll, startScroll } from '../../hooks';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -253,6 +254,19 @@ export const SwordGame = () => {
       }
     );
   }, [isVisible]);
+
+  // Disable scroll while game is active (from instructions to victory)
+  useEffect(() => {
+    if (showInstructions || (gameStarted && !victory)) {
+      stopScroll();
+    } else {
+      startScroll();
+    }
+
+    return () => {
+      startScroll();
+    };
+  }, [showInstructions, gameStarted, victory]);
 
   // Mouse/touch tracking for sword
   const handlePointerMove = useCallback((e: React.PointerEvent) => {

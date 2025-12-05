@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { stopScroll, startScroll } from '../../hooks';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -204,11 +205,26 @@ export const ShooterGame = () => {
     };
   }, [gameStarted, gameOver, spawnEnemy]);
 
+  // Disable scroll while game is active
+  useEffect(() => {
+    if (gameStarted && !gameOver) {
+      stopScroll();
+    } else if (!showResistance) {
+      startScroll();
+    }
+
+    return () => {
+      if (!showResistance) {
+        startScroll();
+      }
+    };
+  }, [gameStarted, gameOver, showResistance]);
+
   // Resistance slide-in animation and auto-hide
   useEffect(() => {
     if (showResistance && resistanceRef.current) {
       // Disable scroll
-      document.body.style.overflow = 'hidden';
+      stopScroll();
 
       gsap.fromTo(
         resistanceRef.current,
@@ -219,12 +235,12 @@ export const ShooterGame = () => {
       // Hide resistance overlay after 3 seconds
       const timer = setTimeout(() => {
         setShowResistance(false);
-        document.body.style.overflow = '';
+        startScroll();
       }, 3000);
 
       return () => {
         clearTimeout(timer);
-        document.body.style.overflow = '';
+        startScroll();
       };
     }
   }, [showResistance]);
