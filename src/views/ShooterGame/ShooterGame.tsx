@@ -224,7 +224,7 @@ export const ShooterGame = () => {
     <section
       ref={sectionRef}
       id="shooter-game"
-      className="relative min-h-screen w-full overflow-hidden bg-empire-bg"
+      className="relative min-h-screen w-full overflow-hidden"
     >
       {/* Fullscreen Resistance Overlay - auto hides after 3s */}
       {showResistance && (
@@ -241,15 +241,33 @@ export const ShooterGame = () => {
         </div>
       )}
 
-      {/* Starfield background */}
+      {/* Gradient from dark empire to sky blue (for VillageNIRD transition) */}
       <div
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(circle at 20% 80%, rgba(0, 245, 255, 0.1) 0%, transparent 30%),
-            radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 30%),
-            linear-gradient(to bottom, #0a0a0f 0%, #12121a 100%)
+            linear-gradient(to bottom,
+              #0a0a0f 0%,
+              #0a1a2a 30%,
+              #0a2a4a 50%,
+              #0a4a7a 70%,
+              #1a6a9a 85%,
+              #298fba 100%
+            )
           `,
+        }}
+      />
+
+      {/* Starfield overlay - fades out towards bottom */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(circle at 20% 30%, rgba(0, 245, 255, 0.1) 0%, transparent 30%),
+            radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 30%)
+          `,
+          maskImage: 'linear-gradient(to bottom, white 0%, white 50%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, white 0%, white 50%, transparent 100%)',
         }}
       />
 
