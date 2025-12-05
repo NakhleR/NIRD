@@ -23,6 +23,7 @@ export const ShooterGame = () => {
   const gameRef = useRef<HTMLDivElement>(null);
   const resistanceRef = useRef<HTMLImageElement>(null);
   const shipRef = useRef<HTMLImageElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
 
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -42,6 +43,30 @@ export const ShooterGame = () => {
   const ENEMY_SIZE = 60;
   const BULLET_SIZE = 10;
   const WIN_SCORE = 10;
+
+  // Text fade in animation (from Transition)
+  useEffect(() => {
+    if (!sectionRef.current || !textRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        textRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 60%',
+            end: 'top 20%',
+            scrub: true,
+          },
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   // Spawn enemies
   const spawnEnemy = useCallback(() => {
@@ -224,7 +249,7 @@ export const ShooterGame = () => {
     <section
       ref={sectionRef}
       id="shooter-game"
-      className="relative min-h-[150vh] w-full overflow-hidden"
+      className="relative w-full overflow-hidden"
     >
       {/* Fullscreen Resistance Overlay - auto hides after 3s */}
       {showResistance && (
@@ -241,21 +266,36 @@ export const ShooterGame = () => {
         </div>
       )}
 
-      {/* Gradient from dark empire to sky blue (for VillageNIRD transition) */}
+      {/* Single unified gradient from empire dark to sky blue */}
       <div
         className="absolute inset-0"
         style={{
           background: `
             linear-gradient(to bottom,
-              #0a0a0f 0%,
-              #0a0a0f 10%,
-              #0a1525 25%,
-              #0a2a4a 45%,
-              #0a4a7a 65%,
-              #1a6a9a 80%,
+              var(--color-empire-bg) 0%,
+              var(--color-empire-bg-secondary) 15%,
+              var(--color-empire-bg-tertiary) 30%,
+              #0a1525 45%,
+              #0a2a4a 60%,
+              #0a4a7a 75%,
+              #1a6a9a 88%,
               #298fba 100%
             )
           `,
+        }}
+      />
+
+      {/* Subtle grid fading out - from Transition */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+          `,
+          backgroundSize: '30px 30px',
+          maskImage: 'linear-gradient(to bottom, white 0%, transparent 30%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, white 0%, transparent 30%)',
         }}
       />
 
@@ -267,14 +307,14 @@ export const ShooterGame = () => {
             radial-gradient(circle at 20% 30%, rgba(0, 245, 255, 0.1) 0%, transparent 30%),
             radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 30%)
           `,
-          maskImage: 'linear-gradient(to bottom, white 0%, white 50%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, white 0%, white 50%, transparent 100%)',
+          maskImage: 'linear-gradient(to bottom, transparent 0%, white 20%, white 60%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, white 20%, white 60%, transparent 100%)',
         }}
       />
 
       {/* Stars */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(50)].map((_, i) => (
+        {[...Array(80)].map((_, i) => (
           <div
             key={i}
             className="absolute w-1 h-1 bg-white rounded-full opacity-60"
@@ -287,6 +327,19 @@ export const ShooterGame = () => {
         ))}
       </div>
 
+      {/* Transition Text - "La Résistance S'organise" */}
+      <div className="relative z-10 min-h-screen w-full flex items-center justify-center">
+        <div ref={textRef} className="text-center px-8 max-w-4xl">
+          <h2 className="font-display text-[clamp(2rem,6vw,4rem)] text-text-light text-glow-cyan mb-6">
+            LA RÉSISTANCE S'ORGANISE
+          </h2>
+          <p className="font-body text-lg text-text-light/70">
+            Un autre numérique est possible...
+          </p>
+        </div>
+      </div>
+
+      {/* Game Section */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen py-12 px-6">
         {/* Title */}
         <h2 className="font-display text-[clamp(1.5rem,5vw,3rem)] text-text-light text-glow-cyan mb-4 text-center">
