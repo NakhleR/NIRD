@@ -32,28 +32,23 @@ export const Transition = () => {
     return () => ctx.revert();
   }, []);
 
-  // Match the exact sky color from greencity.jpg
-  const skyColor = '#298fba';
-
   return (
     <section
       ref={sectionRef}
       id="transition"
       className="relative min-h-[150vh] w-full overflow-hidden"
     >
-      {/* Gradient from Empire dark to greencity sky */}
+      {/* Gradient stays in dark empire tones - blends seamlessly into ShooterGame */}
       <div
         className="absolute inset-0"
         style={{
           background: `
             linear-gradient(to bottom,
               var(--color-empire-bg) 0%,
-              var(--color-empire-bg-secondary) 20%,
-              var(--color-empire-bg-tertiary) 35%,
-              #1a2a3a 50%,
-              #2a4a5a 65%,
-              #3a8aaa 80%,
-              ${skyColor} 100%
+              var(--color-empire-bg-secondary) 25%,
+              var(--color-empire-bg-tertiary) 50%,
+              #0f0f18 75%,
+              #0a0a0f 100%
             )
           `,
         }}

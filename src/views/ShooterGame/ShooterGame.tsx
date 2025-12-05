@@ -224,7 +224,7 @@ export const ShooterGame = () => {
     <section
       ref={sectionRef}
       id="shooter-game"
-      className="relative min-h-screen w-full overflow-hidden"
+      className="relative min-h-[150vh] w-full overflow-hidden"
     >
       {/* Fullscreen Resistance Overlay - auto hides after 3s */}
       {showResistance && (
@@ -248,10 +248,11 @@ export const ShooterGame = () => {
           background: `
             linear-gradient(to bottom,
               #0a0a0f 0%,
-              #0a1a2a 30%,
-              #0a2a4a 50%,
-              #0a4a7a 70%,
-              #1a6a9a 85%,
+              #0a0a0f 10%,
+              #0a1525 25%,
+              #0a2a4a 45%,
+              #0a4a7a 65%,
+              #1a6a9a 80%,
               #298fba 100%
             )
           `,
