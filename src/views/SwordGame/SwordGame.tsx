@@ -212,6 +212,7 @@ export const SwordGame = () => {
   const velocity = useRef({ x: 0, y: 0 });
   const lastHitTime = useRef(0);
   const hasTriggered = useRef(false);
+  const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -219,18 +220,22 @@ export const SwordGame = () => {
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: 'top bottom',
-        end: 'bottom top',
+        start: 'top 80%',
+        end: 'bottom 20%',
         onEnter: () => {
+          setIsInView(true);
           if (hasTriggered.current) return;
           hasTriggered.current = true;
           setIsVisible(true);
         },
         onEnterBack: () => {
+          setIsInView(true);
           if (hasTriggered.current) return;
           hasTriggered.current = true;
           setIsVisible(true);
         },
+        onLeave: () => setIsInView(false),
+        onLeaveBack: () => setIsInView(false),
       });
     }, sectionRef);
 
@@ -255,9 +260,9 @@ export const SwordGame = () => {
     );
   }, [isVisible]);
 
-  // Disable scroll while game is active (from instructions to victory)
+  // Disable scroll while game is active (from instructions to victory) AND in view
   useEffect(() => {
-    if (showInstructions || (gameStarted && !victory)) {
+    if (isInView && (showInstructions || (gameStarted && !victory))) {
       stopScroll();
     } else {
       startScroll();
@@ -266,7 +271,7 @@ export const SwordGame = () => {
     return () => {
       startScroll();
     };
-  }, [showInstructions, gameStarted, victory]);
+  }, [showInstructions, gameStarted, victory, isInView]);
 
   // Mouse/touch tracking for sword
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
